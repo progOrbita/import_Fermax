@@ -30,4 +30,24 @@ class FermaxCategories
         return $this->lastError;
     }
 
+    /**
+     * function to get id_category_default or create it
+     * 
+     * @param string $category
+     * 
+     * @return int 
+     */
+    public function get(string $category): int
+    {
+        if (empty($category)) {
+            return 0;
+        }
+
+        if (!isset($this->data[$category])) {
+            $this->data[$category] = 0;
+        }
+
+        return (int) $this->data[$category];
+    }
+
 }
