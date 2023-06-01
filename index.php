@@ -75,3 +75,9 @@ $new_header = [
 
 
 $fermax = new Fermax([$new_header, $header], __DIR__ . '/data/fermax (5).xlsx', 'reference');
+$fermax_data = $fermax->getData((bool)Tools::getValue('reload', false));
+
+if (empty($fermax_data)) {
+    echo $fermax->getLastError();
+    die;
+}
