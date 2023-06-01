@@ -65,4 +65,13 @@ class FermaxTranslate
         return $count;
     }
 
+    /**
+     * function to get total count 
+     * 
+     * @return int
+     */
+    public function totalCount(): int
+    {
+        return $this->totalCount;
+    }
 }
