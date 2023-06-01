@@ -162,4 +162,36 @@ class Actions extends AdminImportControllerCore
         return 'Producto creado correctamente';
     }
 
+    /**
+     * create img product
+     * 
+     * @param int $idProduct
+     * @param string $url
+     * @param array $legend
+     * 
+     * @return bool
+     */
+    public static function createImg(int $idProduct, string $url, array $legend)
+    {
+        $image = new Image();
+        $image->id_product = (int) $idProduct;
+        $image->position = Image::getHighestPosition($idProduct) + 1;
+        $image->legend = $legend;
+
+        if (!Image::getCover($image->id_product)) {
+            $image->cover = 1;
+        } else {
+            $image->cover = 0;
+        }
+
+        if (($image->validateFieldsLang(false, true)) !== true) {
+            return false;
+        }
+
+        if (!$image->add()) {
+            return false;
+        }
+
+        return (parent::copyImg($idProduct, $image->id, $url));
+    }
 }
