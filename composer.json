@@ -1,0 +1,17 @@
+{
+    "name": "orbitadigital/fermax",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Orbitadigital\\Fermax\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "progOrbita",
+            "email": "web.orbitadigital@gmail.com"
+        }
+    ],
+    "require": {}
+}
