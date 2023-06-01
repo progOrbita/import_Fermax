@@ -73,3 +73,5 @@ $new_header = [
     "NFAM"
 ];
 
+
+$fermax = new Fermax([$new_header, $header], __DIR__ . '/data/fermax (5).xlsx', 'reference');
