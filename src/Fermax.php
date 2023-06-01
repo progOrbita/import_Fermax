@@ -18,4 +18,11 @@ class Fermax
     private $multilingualFields = ['name', 'description', 'description_short'];
     private $gallery = ['img_main', 'img_1', 'img_2', 'img_3', 'img_4', 'img_5', 'img_6'];
 
+    public function __construct(array $header, string $name, string $key)
+    {
+        $this->header = $header;
+        $this->name = $name;
+        $this->key = $key;
+    }
+
 }
