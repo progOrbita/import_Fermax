@@ -46,4 +46,23 @@ class FermaxTranslate
         }
     }
 
+    /**
+     * function to count number of characters to translate
+     * 
+     * @param array $product
+     * 
+     * @return int
+     */
+    public function countTranslate(array $product): int
+    {
+        $count = 0;
+        foreach ($this->fields as $field) {
+            $count += strlen($product[$field][$this->lang]);
+        }
+
+        $count = $count * count($this->langs);
+        $this->totalCount += $count;
+        return $count;
+    }
+
 }
