@@ -25,4 +25,14 @@ class Fermax
         $this->key = $key;
     }
 
+    /**
+     * function to get last error
+     * 
+     * @return string
+     */
+    public function getLastError(): string
+    {
+        return $this->lastError;
+    }
+
 }
