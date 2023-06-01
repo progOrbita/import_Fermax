@@ -22,4 +22,28 @@ class FermaxTranslate
         $this->lang = $lang;
     }
 
+    /**
+     * function to translate to multilingual fields
+     * 
+     * @param array &$product
+     * 
+     * @return void
+     */
+    public function getTranslate(array &$product): void
+    {
+        foreach ($this->fields as $field) {
+            foreach ($this->langs as $key => $lang) {
+                if ($lang == $this->lang) {
+                    $product[$field][$key] = $product[$field][$this->lang];
+                    continue;
+                }
+
+                //TODO translate
+                $product[$field][$key] = $product[$field][$this->lang];
+            }
+
+            unset($product[$field][$this->lang]);
+        }
+    }
+
 }
