@@ -87,5 +87,8 @@ if ($ps_data === false) {
     die;
 }
 
+$ps_data = array_combine(array_column($ps_data, 'reference'), array_column($ps_data, 'id_product'));
+$supplier_references = array_unique(array_merge(array_keys($ps_data), array_keys($fermax_data)));
+$res = [];
 $cat = new Categories(1);
 $translate = new FermaxTranslate(['name', 'description_short', 'description'], 'es');
