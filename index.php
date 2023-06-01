@@ -81,3 +81,9 @@ if (empty($fermax_data)) {
     echo $fermax->getLastError();
     die;
 }
+$ps_data = Db::getInstance()->executeS('SELECT `id_product`, `reference` FROM `ps_product` WHERE `id_supplier` IN (4,5,6)');
+if ($ps_data === false) {
+    echo 'consulta erronea a la db';
+    die;
+}
+
