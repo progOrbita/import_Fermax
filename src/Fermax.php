@@ -139,4 +139,23 @@ class Fermax
         return $data;
     }
 
+    /**
+     * fucntion to build html on string 
+     * 
+     * @param string $text
+     * 
+     * @return string
+     */
+    private function getHtml(string $text): string
+    {
+        if (empty($text)) {
+            return '';
+        }
+
+        $text = '<p>' . implode('</p><p>', array_filter(explode("\n", $text))) . '</p>';
+        $text = preg_replace("/<p>-([^<]*)<\/p>/Ui", '<li>$1</li>', $text);
+        $text = preg_replace("/<p>•([^<]*)<\/p>/Ui", '<li>$1</li>', $text);
+        $text = preg_replace("/<\/li><p>/Ui", "</li><br><p>", $text);
+        return $text;
+    }
 }
