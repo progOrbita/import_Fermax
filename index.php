@@ -92,3 +92,22 @@ $supplier_references = array_unique(array_merge(array_keys($ps_data), array_keys
 $res = [];
 $cat = new Categories(1);
 $translate = new FermaxTranslate(['name', 'description_short', 'description'], 'es');
+foreach ($supplier_references as $reference) {
+    try {
+        if (!isset($ps_data[$reference])) {
+                $res[] = ['reference' => $reference, 'res' => Actions::create($fermax_data[$reference], (bool)Tools::getValue('write', false))];
+
+            continue;
+        }
+
+        if (!isset($fermax_data[$reference])) {
+            $res[] = ['reference' => "" . $reference . "", 'res' => Actions::discontinue((int) $ps_data[$reference], (bool)Tools::getValue('write', false))];
+            continue;
+        }
+
+        $res[] = ['reference' => $reference, 'res' => Actions::update((int) $ps_data[$reference], $fermax_data[$reference], (bool)Tools::getValue('write', false))];
+    } catch (Throwable $e) {
+        $res[] = ['reference' => $reference, 'res' => 'Excepción capturada: ' .  $e->getMessage()];
+    }
+}
+
