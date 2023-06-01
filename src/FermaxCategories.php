@@ -50,4 +50,23 @@ class FermaxCategories
         return (int) $this->data[$category];
     }
 
+    /**
+     * function to update json
+     * 
+     * @return bool
+     */
+    public function save(): bool
+    {
+        if ($this->originalData == $this->data) {
+            return true;
+        }
+
+        $json = new JsonImporter($this->name);
+        if (!$json->save($this->data, $this->name)) {
+            $this->lastError = $json->getLastError();
+            return false;
+        }
+
+        return true;
+    }
 }
