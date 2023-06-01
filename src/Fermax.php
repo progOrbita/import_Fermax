@@ -67,4 +67,76 @@ class Fermax
         return $data;
     }
 
+    /**
+     * process xslx data
+     * 
+     * @return array
+     */
+    private function processData(): array
+    {
+        $data = ReadFile::get($this->header, $this->name, $this->key);
+        if (empty($data)) {
+            return [];
+        }
+
+        if (!is_array($data)) {
+            $this->lastError = $data;
+            return [];
+        }
+
+        $categories = new FermaxCategories();
+        foreach ($data as &$product) {
+            foreach ($this->multilingualFields as $field) {
+                $product[$field] = ['es' => $product[$field]];
+            }
+
+            $product["reference"] = $product["reference"];
+            $product["height"] = $product["height"] / 10;
+            $product["width"] = $product["width"] / 10;
+            $product["depth"] = $product["depth"] / 10;
+            $product["weight"] = round((float) $product["weight"]);
+            $product["description"]['es'] = Tools::purifyHtml($this->getHtml($product["description"]['es']));
+            $product["description_short"]['es'] = $this->getHtml($product["description_short"]['es']);
+            if (strlen($product["description_short"]['es']) > 807) {
+                $product["description_short"]['es'] = substr($product["description_short"]['es'], 0, 804) . '...';
+            }
+
+            $product["description_short"]['es'] = Tools::purifyHtml($product["description_short"]['es']);
+            $product['gallery'] = [];
+            foreach ($this->gallery as $field) {
+                $product[$field] = explode(',', $product[$field]);
+                $product['gallery'] = array_merge($product['gallery'], $product[$field]);
+            }
+
+            $product['gallery'] = array_filter(array_unique($product['gallery']));
+            $product['price'] = round((float)$product['price'], 2);
+            $product['minimun_price'] = round((float)$product['minimun_price'], 2);
+            $product['id_category_default'] = $categories->get(str_replace(['á', 'à', 'é', 'è', 'í', 'ì', 'ó', 'ò', 'ú', 'ù'], ['a', 'a', 'e', 'e', 'i', 'i', 'o', 'o', 'u', 'u'], trim(strtolower($product['category']))));
+            $product['id_supplier'] = 4;
+            $product['supplier_name'] = 'MetaluxGeneral';
+            if (strtolower(trim($product['subcategory'])) === 'repuestos') {
+                $product['id_supplier'] = 5;
+                $product['supplier_name'] = 'MetaluxRepuesto';
+            }
+
+            if ($product['minimun_price'] > 0) {
+                $product['id_supplier'] = 6;
+                $product['supplier_name'] = 'MetaluxNeto';
+                $product['price'] = $product['minimun_price'];
+            }
+
+            $product['wholesale_price'] = round((float)($product['price'] - ($product['price'] * 0.15)), 2);
+            $product['visibility'] = 'both';
+            $product['on_sale'] = true;
+            $product['active'] = true;
+            $product['show_price'] = true;
+            $product['quantity'] = 0; //TODO
+            $product['available_for_order'] = true;
+            $product['id_manufacturer'] = 95;
+        }
+
+        $categories->save();
+        return $data;
+    }
+
 }
