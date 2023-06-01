@@ -35,4 +35,36 @@ class Fermax
         return $this->lastError;
     }
 
+    /**
+     * function to get fermax data
+     * 
+     * @param bool $reload
+     * 
+     * @return array
+     */
+    public function getData(bool $reload = false): array
+    {
+        $fileName = _PS_CORE_DIR_ . '/import/Fermax/data/Fermax_' . Date('d-m-Y') . '.json';
+        $json = new JsonImporter($fileName);
+        if ($json->validateFile() && !$reload) {
+            $data = $json->read();
+            if (empty($data)) {
+                $this->lastError = $json->getLastError();
+            }
+
+            return $data;
+        }
+
+        $data = $this->processData();
+        if (empty($data)) {
+            return $data;
+        }
+
+        if (!$json->save($data, $fileName)) {
+            $this->lastError = $json->getLastError();
+        }
+
+        return $data;
+    }
+
 }
