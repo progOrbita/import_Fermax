@@ -104,4 +104,62 @@ class Actions extends AdminImportControllerCore
         return 'Actualizado: ' . implode(',', $changes);
     }
 
+    /**
+     * function to create product
+     * 
+     * @param array $productData
+     * @param bool $write
+     * 
+     * @return string
+     */
+    public static function create(array $productData, bool $write = false): string
+    {
+        global $cat;
+        global $translate;
+
+        $count = $translate->countTranslate($productData);
+        if (!$write) {
+            return 'Producto a crear. Caracteres a traducir: ' . $count;
+        }
+
+        $translate->getTranslate($productData);
+        $product = new Product();
+        foreach ($productData as $key => $value) {
+            if (!property_exists(new Product, $key) || $key == 'category') {
+                continue;
+            }
+
+            if (!empty($productData[$key])) {
+                if (is_array($productData[$key])) {
+                    $product->{$key} = $productData[$key];
+                    continue;
+                }
+
+                $product->{$key} = $productData[$key];
+            }
+        }
+
+        $product->id_tax_rules_group = 1;
+        if (!$product->save()) {
+            return 'Error creacion del producto';
+        }
+
+        StockAvailable::setQuantity($product->id, 0, $productData['quantity']);
+        $product->updateCategories($cat->getCacheCategories($productData['id_category_default']));
+        $product->addSupplierReference($productData['id_supplier'], 0, $productData['supplier_reference']);
+        if (!empty($productData['gallery'])) {
+            foreach ($productData['gallery'] as $img) {
+                if (empty($img)) {
+                    continue;
+                }
+
+                if (!self::createImg((int)$product->id, $img, $productData['name'])) {
+                    return 'Producto creado, pero error con el creado de imagenes';
+                }
+            }
+        }
+
+        return 'Producto creado correctamente';
+    }
+
 }
