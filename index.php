@@ -87,3 +87,5 @@ if ($ps_data === false) {
     die;
 }
 
+$cat = new Categories(1);
+$translate = new FermaxTranslate(['name', 'description_short', 'description'], 'es');
