@@ -97,10 +97,6 @@ class Fermax
             $product["weight"] = round((float) $product["weight"]);
             $product["description"]['es'] = Tools::purifyHtml($this->getHtml($product["description"]['es']));
             $product["description_short"]['es'] = $this->getHtml($product["description_short"]['es']);
-            if (strlen($product["description_short"]['es']) > 807) {
-                $product["description_short"]['es'] = substr($product["description_short"]['es'], 0, 804) . '...';
-            }
-
             $product["description_short"]['es'] = Tools::purifyHtml($product["description_short"]['es']);
             $product['gallery'] = [];
             foreach ($this->gallery as $field) {
