@@ -110,7 +110,7 @@ class Fermax
             $product['id_category_default'] = $categories->get(str_replace(['á', 'à', 'é', 'è', 'í', 'ì', 'ó', 'ò', 'ú', 'ù'], ['a', 'a', 'e', 'e', 'i', 'i', 'o', 'o', 'u', 'u'], trim(strtolower($product['category']))));
             $product['id_supplier'] = 4;
             $product['supplier_name'] = 'MetaluxGeneral';
-            if (strtolower(trim($product['subcategory'])) === 'repuestos') {
+            if (strtolower(trim($product['category'])) === 'repuestos') {
                 $product['id_supplier'] = 5;
                 $product['supplier_name'] = 'MetaluxRepuesto';
             }
