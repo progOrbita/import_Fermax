@@ -154,11 +154,6 @@ class Actions extends AdminImportControllerCore
             }
 
             if (!empty($productData[$key])) {
-                if (is_array($productData[$key])) {
-                    $product->{$key} = $productData[$key];
-                    continue;
-                }
-
                 $product->{$key} = $productData[$key];
             }
         }
