@@ -131,6 +131,22 @@ class Actions extends AdminImportControllerCore
         }
 
         $translate->getTranslate($productData);
+        foreach ($productData['name'] as $key => $value) {
+            $productData['name'][$key] = "Fermax " . $productData['supplier_reference'] . " " . $productData['name'][$key];
+            $name = $productData['name'][$key];
+            if (strlen($productData['name'][$key]) > 128) {
+                $productData["name"][$key] = substr($productData["name"][$key], 0, 125) . '...';
+            }
+
+            $description_short = $productData['description_short'][$key];
+            $productData['description_short'][$key] = $name . " " . strip_tags($productData['description_short'][$key]);
+            if (strlen($productData["description_short"][$key]) > 807) {
+                $productData["description_short"][$key] = substr($productData["description_short"][$key], 0, 804) . '...';
+            }
+
+            $productData['description'][$key] = "<h3>" . $name . "</h3>" . $description_short . $productData['description'][$key];
+        }
+
         $product = new Product();
         foreach ($productData as $key => $value) {
             if (!property_exists(new Product, $key) || $key == 'category') {
