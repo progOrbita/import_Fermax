@@ -17,12 +17,11 @@ use Throwable;
 use Categories;
 use Orbitadigital\Fermax\FermaxTranslate;
 
+ini_set('display_errors', '0');
 $header = [
     "COD",
     "REFERENCIA",
     "NOMBRE",
-    "categoria",
-    "sub categoria",
     "DESCRIPCIÓN",
     "DETALLES TÉCNICOS",
     "IMAGEN PRINCIPAL",
@@ -42,15 +41,15 @@ $header = [
     "PVPR",
     "PVP",
     "HS Codes",
-    "NFAM"
+    "NFAM",
+    "Categoria",
+    "Precio Compra"
 ];
 
 $new_header = [
     "reference",
     "supplier_reference",
     "name",
-    "category",
-    "subcategory",
     "description_short",
     "description",
     "img_main",
@@ -70,11 +69,13 @@ $new_header = [
     "minimun_price",
     "price",
     "HS Codes",
-    "NFAM"
+    "NFAM",
+    "category",
+    "wholesale_price"
 ];
 
 
-$fermax = new Fermax([$new_header, $header], __DIR__ . '/data/fermax (5).xlsx', 'reference');
+$fermax = new Fermax([$new_header, $header], __DIR__ . '/data/fermax final (1).xlsx', 'reference');
 $fermax_data = $fermax->getData((bool)Tools::getValue('reload', false));
 
 if (empty($fermax_data)) {
@@ -89,14 +90,20 @@ if ($ps_data === false) {
 
 $ps_data = array_combine(array_column($ps_data, 'reference'), array_column($ps_data, 'id_product'));
 $supplier_references = array_unique(array_merge(array_keys($ps_data), array_keys($fermax_data)));
+$supplier_references=['fermax-1413'];//TODO borrar
 $res = [];
 $cat = new Categories(1);
 $translate = new FermaxTranslate(['name', 'description_short', 'description'], 'es');
+$cnt = 0;
 foreach ($supplier_references as $reference) {
     try {
         if (!isset($ps_data[$reference])) {
+            $res[] = ['reference' => $reference, 'res' => Actions::create($fermax_data[$reference], false)];
+            if ($cnt < 50) {
                 $res[] = ['reference' => $reference, 'res' => Actions::create($fermax_data[$reference], (bool)Tools::getValue('write', false))];
+            }
 
+            $cnt++;
             continue;
         }
 
