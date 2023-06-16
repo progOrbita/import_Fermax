@@ -17,6 +17,7 @@ class Actions extends AdminImportControllerCore
      * make some product discontinued
      * 
      * @param int $idProduct
+     * @param bool $write
      * 
      * @return string
      */
@@ -54,6 +55,7 @@ class Actions extends AdminImportControllerCore
      * 
      * @param int $idProduct
      * @param array $productData
+     * @param bool $write
      * 
      * @return string
      */
@@ -173,7 +175,7 @@ class Actions extends AdminImportControllerCore
      * 
      * @return bool
      */
-    public static function createImg(int $idProduct, string $url, array $legend)
+    public static function createImg(int $idProduct, string $url, array $legend): bool
     {
         $image = new Image();
         $image->id_product = (int) $idProduct;
