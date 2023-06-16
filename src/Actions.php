@@ -171,16 +171,13 @@ class Actions extends AdminImportControllerCore
         StockAvailable::setQuantity($product->id, 0, $productData['quantity']);
         $product->updateCategories($cat->getCacheCategories($productData['id_category_default']));
         $product->addSupplierReference($productData['id_supplier'], 0, $productData['supplier_reference']);
-        if (!empty($productData['gallery'])) {
-            foreach ($productData['gallery'] as $img) {
-                if (empty($img)) {
-                    continue;
-                }
+        foreach ($productData['gallery'] as $img) {
+            if (empty($img)) {
+                continue;
             }
 
-                if (!self::createImg((int)$product->id, $img, $productData['name'])) {
-                    return 'Producto creado, pero error con el creado de imagenes';
-                }
+            if (!self::createImg((int)$product->id, $img, $productData['name'])) {
+                return 'Producto creado, pero error con el creado de imagenes';
             }
         }
 
