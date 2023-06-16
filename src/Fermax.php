@@ -121,12 +121,12 @@ class Fermax
                 $product['price'] = $product['minimun_price'];
             }
 
-            $product['wholesale_price'] = round((float)($product['price'] - ($product['price'] * 0.15)), 2);
+            $product['wholesale_price'] = round((float)$product['wholesale_price'], 2);
             $product['visibility'] = 'both';
             $product['on_sale'] = true;
             $product['active'] = true;
             $product['show_price'] = true;
-            $product['quantity'] = 0; //TODO
+            $product['quantity'] = 100; 
             $product['available_for_order'] = true;
             $product['id_manufacturer'] = 95;
         }
