@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Orbitadigital\Fermax;
 
-use Orbitadigital\Fermax\FermaxTranslate;
 use Product;
 use StockAvailable;
 use Image;
 use AdminImportControllerCore;
+use Db;
+use SpecificPriceRule;
 
 class Actions extends AdminImportControllerCore
 {
@@ -152,6 +153,7 @@ class Actions extends AdminImportControllerCore
                 if (empty($img)) {
                     continue;
                 }
+            }
 
                 if (!self::createImg((int)$product->id, $img, $productData['name'])) {
                     return 'Producto creado, pero error con el creado de imagenes';
