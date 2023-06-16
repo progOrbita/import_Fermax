@@ -71,12 +71,17 @@ class Actions extends AdminImportControllerCore
             $product->quantity = $productData['quantity'];
         }
 
-        if ($productData['id_supplier'] > 0 && $productData['supplier_reference']) {
-            $product->addSupplierReference($productData['id_supplier'], 0, $productData['supplier_reference']);
-        }
-
         if ($product->id_supplier != $productData['id_supplier']) {
             $changes[] = 'id_supplier (' . $product->id_supplier . '->' . $productData['id_supplier'] . ')';
+            if ($write) {
+                if (!Db::getInstance()->delete('product_supplier', ' id_product=' . $product->id)) {
+                    return 'Error con el delete de suppliers';
+                }
+
+                $product->addSupplierReference($productData['id_supplier'], 0, $productData['supplier_reference']);
+                $product->id_supplier = $productData['id_supplier'];
+                SpecificPriceRule::applyAllRules([(int)$product->id]);
+            }
         }
 
         if ($product->id_category_default == 10) {
