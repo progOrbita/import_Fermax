@@ -93,7 +93,7 @@ class Actions extends AdminImportControllerCore
             $product->visibility = 'both';
             $product->show_price = true;
             $product->id_category_default = $productData['id_category_default'];
-            $product->updateCategories($cat->getCacheCategories($productData['id_category_default']));
+            $write && $product->updateCategories($cat->getCacheCategories($productData['id_category_default']));
             $changes[] = 'Producto a recatalogar';
         }
 
